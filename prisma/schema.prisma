@@ -1,0 +1,249 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Language {
+  FR
+  EN
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+enum MemberPosition {
+  PROFESSOR
+  ASSOCIATE_PROFESSOR
+  ASSISTANT_PROFESSOR
+  LECTURER
+  RESEARCHER
+  PHD_STUDENT
+  MASTER_STUDENT
+  ENGINEER
+}
+
+enum ContentType {
+  NEWS
+  SEMINAR
+  WORKSHOP
+  CONFERENCE
+  SYMPOSIUM
+  FORUM
+  CELEBRATION
+}
+
+enum UserRole {
+  ADMIN
+  MEMBER
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String  @map("user_id")
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique @map("session_token")
+  userId       String   @map("user_id")
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime? @map("email_verified")
+  image         String?
+  role          UserRole  @default(MEMBER)
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  accounts Account[]
+  sessions Session[]
+  memberProfile Member? @relation("UserMemberProfile")
+
+  @@map("users")
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verificationtokens")
+}
+
+model Team {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  image       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  translations TeamTranslation[]
+  members      Member[]
+  publications Publication[]
+
+  @@map("teams")
+}
+
+model TeamTranslation {
+  id            String   @id @default(cuid())
+  language      Language
+  name          String
+  description   String   @db.Text
+  valueAdded    String?  @db.Text
+  keywords      String[]
+  domains       String[]
+  expertises    String[]
+
+  team   Team   @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  teamId String
+
+  @@unique([teamId, language])
+  @@map("team_translations")
+}
+
+model Member {
+  id        String         @id @default(cuid())
+  email     String         @unique
+  phone     String?
+  image     String?
+  gender    Gender
+  firstname       String
+  lastname        String
+  position  MemberPosition
+  isTeamLeader Boolean     @default(false)
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  team         Team?              @relation(fields: [teamId], references: [id])
+  teamId       String?
+  user         User?              @relation("UserMemberProfile", fields: [userId], references: [id])
+  userId       String?            @unique
+  translations MemberTranslation[]
+  publications PublicationAuthor[]
+  contents     Content[]          @relation("ContentCreator")
+
+  @@map("members")
+}
+
+model MemberTranslation {
+  id         String   @id @default(cuid())
+  language   Language
+  bio        String?  @db.Text
+  institution String?
+  member   Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  memberId String
+
+  @@unique([memberId, language])
+  @@map("member_translations")
+}
+
+model Publication {
+  id        String   @id @default(cuid())
+  journal   String
+  volume    String?
+  issue     String?
+  pages     String?
+  doi       String?
+  url       String?
+  year      Int
+  publishedAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  team         Team?               @relation(fields: [teamId], references: [id])
+  teamId       String?
+  translations PublicationTranslation[]
+  authors      PublicationAuthor[]
+
+  @@map("publications")
+}
+
+model PublicationTranslation {
+  id       String   @id @default(cuid())
+  language Language
+  title    String   @db.Text
+  abstract String?  @db.Text
+  keywords String[]
+
+  publication   Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
+  publicationId String
+
+  @@unique([publicationId, language])
+  @@map("publication_translations")
+}
+
+model PublicationAuthor {
+  id     String @id @default(cuid())
+  order  Int
+
+  publication   Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
+  publicationId String
+  author        Member      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId      String
+
+  @@unique([publicationId, authorId])
+  @@map("publication_authors")
+}
+
+model Content {
+  id          String        @id @default(cuid())
+  slug        String        @unique
+  type        ContentType
+  image       String?
+  publishedAt DateTime?
+  eventDate   DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  createdBy   Member?       @relation("ContentCreator", fields: [createdById], references: [id])
+  createdById String?
+
+  translations ContentTranslation[]
+
+  @@map("contents")
+}
+
+model ContentTranslation {
+  id            String   @id @default(cuid())
+  language      Language
+  title         String
+  description   String   @db.Text
+  categoryLabel String?
+  categoryColor String?
+
+  content   Content @relation(fields: [contentId], references: [id], onDelete: Cascade)
+  contentId String
+
+  @@unique([contentId, language])
+  @@map("content_translations")
+}

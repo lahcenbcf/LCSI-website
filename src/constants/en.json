@@ -1,0 +1,142 @@
+{
+  "Header": {
+    "nav": {
+      "presentation": "Presentation",
+      "teams": "Teams",
+      "publications": "Publications",
+      "members": "Members",
+      "news": "News",
+      "language": "Language"
+    }
+  },
+  "HomePage": {
+    "heroSection": {
+      "lab_name": "Laboratory of Communication in Computer Systems",
+      "small_description": "LCSI LAB conducts research in computer science, software engineering, cybersecurity, and artificial intelligence. Our work aims to bridge academic advances with concrete technological solutions.",
+      "KnowMore": "Know More"
+    },
+    "teamsSection": {
+      "title": "TEAMS",
+      "buttonText": "Learn More"
+    },
+    "actualiteSection": {
+      "title": "NEWS",
+      "viewAll": "View All"
+    },
+    "publicationsSection": {
+      "title": "LATEST PUBLICATIONS",
+      "buttonText": "See All"
+    },
+    "MembersSection": {
+      "sectionTitle": "MEMBERS",
+      "buttonText": "See All"
+    }
+  },
+  "PresentationPage": {
+    "hero": {
+      "title": "Laboratory Presentation",
+      "subtitle": "LCSI - Laboratory of Communication in Computer Systems"
+    },
+    "lcsi": {
+      "title": "The LCSI",
+      "description": "The LCSI (Communication in Computer Systems Laboratory) is a specialized research center at ESI, dedicated to the study and development of solutions in key areas of computer science, such as artificial intelligence, advanced databases, distributed systems and applied mathematics. It brings together several active research teams, supervising Masters and PhD students. The laboratory plays a central role in the school's advanced training and scientific production, and participates in national projects (PRFU) and academic collaborations, reinforcing the visibility of research at ESI.  "
+    },
+    "equipe": {
+      "title": "Our Team",
+      "description": "The LCSI brings together a multi-disciplinary team of researchers and teacher-researchers, supported by PhD and Master students. The laboratory is structured around four research teams covering a variety of fields: databases, artificial intelligence, applied mathematics and distributed systems. Each team is headed by a scientific leader, and the laboratory is coordinated by a director assisted by a steering committee. "
+    },
+    "thematiques": {
+      "title": "Our Research Areas",
+      "description": "The LCSI is an applied research laboratory that explores several areas of advanced computing, such as distributed systems, post-relational databases, artificial intelligence, image processing, data mining and applied mathematics. He is also interested in semantic analysis, spatio-temporal visualization and emerging data science technologies. Its work leads to publications and prototypes, and contributes to training through research, often in collaboration with other laboratories or industrial partners."
+    },
+    "local": {
+      "title": "Our Local",
+      "description": "The LCSI is located on the campus of the École Nationale Supérieure d'Informatique (ESI) in Oued Smar, Algiers. The laboratory occupies a surface area of around 200 m², spread over several offices and work rooms. These premises can accommodate researchers, teachers, PhD students and project students. The laboratory also has space for scientific meetings and mentoring, providing an environment conducive to collaborative research and innovation."
+    }
+  },
+  "TeamsPage": {
+    "title": "Teams",
+    "description": "Discover the different teams that make up our lab and their areas of expertise.",
+    "members": "Members",
+    "projects": "Projects",
+    "buttonText": "Learn More"
+  },
+  "TeamDetail": {
+    "expertise": "OUR EXPERTISE",
+    "domains": "Application domains",
+    "technologies": "Technologies used",
+    "expertises": "Our expertise",
+    "domainsApplication": "Our application domains",
+    "valueAdded": "Our added value",
+    "keywords": "Keywords"
+  },
+  "PublicationsPage": {
+    "title": "Publications",
+    "description": "Explore our recent publications and the contributions of our lab to scientific research.",
+    "filters": {
+      "allTeams": "All Teams",
+      "allYears": "All Years"
+    },
+    "showMore": "Show More",
+    "noResults": "No publications found for the selected criteria."
+  },
+  "MembersPage": {
+    "title": "Members",
+    "description": "Meet the members of our lab, their roles, and contributions.",
+    "filters": {
+      "allTeams": "All Teams",
+      "teams": {
+        "DDD": "Dynamic Data Distribution",
+        "BDA": "Advanced Databases",
+        "PI": "Intelligent Processes",
+        "MA": "Applied Mathematics"
+      }
+    },
+    "noResults": "No members found for the selected team."
+  },
+  "NewsPage": {
+    "title": "News",
+    "description": "Stay updated with the latest news and events from our lab.",
+    "bottomPage": "All news have been loaded",
+    "noResults": "No news available at the moment.",
+    "backToNews": "Back to News",
+    "eventDateLabel": "Event on",
+    "publishedAtLabel": "Published on",
+    "updatedAtLabel": "Last updated on"
+  },
+  "Footer": {
+    "info": {
+      "title": "Info",
+      "address": "Address:",
+      "fax": "Fax:",
+      "tel": "Tel:"
+    },
+    "contact": {
+      "title": "Contact",
+      "director": "Director:"
+    },
+    "explore": {
+      "title": "Explore More",
+      "presentation": "Lab Presentation",
+      "teams": "Teams",
+      "publications": "Publications",
+      "members": "Members",
+      "news": "News"
+    },
+    "legal": {
+      "copyright": "All rights reserved.",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Use"
+    }
+  },
+  "TeamContact": {
+    "title": "Contact",
+    "teamLeader": "Team Leader",
+    "teamEmail": "Lab Email",
+    "info": "For any information or collaboration request"
+  },
+  "MemberComp": {
+    "TeamMember": "Member of the Team",
+    "TeamLeader": "Leader of the Team"
+  }
+}

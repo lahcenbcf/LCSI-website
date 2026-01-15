@@ -1,0 +1,48 @@
+node_modules
+.next
+.vscode
+.env
+.env.local
+.env.*.local
+dist
+coverage
+.DS_Store
+.git
+.gitignore
+``` ````
+
+Build command:
+
+- From project root:
+  docker build -t lcsi-lab-website:latest .
+
+Notes / alternatives:
+- Ensure prisma/schema.prisma actually exists in the repository at prisma/schema.prisma.
+- If you prefer not to copy prisma during deps, set PRISMA_GENERATE_SKIP=1 in the deps stage environment and run `npx prisma generate --schema=./prisma/schema.prisma` later in the builder after copying full source.
+- If you still get the same error, run prisma generate locally to verify schema path: prisma generate --schema=prisma/schema.prisma
+
+If you want, I can apply the Dockerfile and .dockerignore changes directly.// filepath: /home/lahcen/Downloads/lcsi-lab-website-main-vs/lcsi-lab-website-main/.dockerignore
+node_modules
+.next
+.vscode
+.env
+.env.local
+.env.*.local
+dist
+coverage
+.DS_Store
+.git
+.gitignore
+``` ````
+
+Build command:
+
+- From project root:
+  docker build -t lcsi-lab-website:latest .
+
+Notes / alternatives:
+- Ensure prisma/schema.prisma actually exists in the repository at prisma/schema.prisma.
+- If you prefer not to copy prisma during deps, set PRISMA_GENERATE_SKIP=1 in the deps stage environment and run `npx prisma generate --schema=./prisma/schema.prisma` later in the builder after copying full source.
+- If you still get the same error, run prisma generate locally to verify schema path: prisma generate --schema=prisma/schema.prisma
+
+If you want, I can apply the Dockerfile and .dockerignore changes directly.

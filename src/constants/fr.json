@@ -1,0 +1,205 @@
+{
+  "Header": {
+    "nav": {
+      "presentation": "Presentation",
+      "teams": "Equipes",
+      "publications": "Publications",
+      "members": "Membres",
+      "news": "Actualites",
+      "language": "Langue"
+    }
+  },
+  "HomePage": {
+    "heroSection": {
+      "lab_name": "Laboratoire de la Communication dans les SystEmes Informatiques",
+      "small_description": "LCSI LAB mène des recherches en informatique, genie logiciel, cybersecurite et intelligence artificielle. Notre travail vise à rapprocher les avancees academiques des solutions technologiques concrètes.",
+      "KnowMore": "En savoir plus"
+    },
+    "teamsSection": {
+      "title": "EQUIPES",
+      "buttonText": "Savoir Plus"
+    },
+    "actualiteSection": {
+      "title": "ACTUALITES",
+      "viewAll": "Voir tout",
+      "articles": [
+        {
+          "id": 1,
+          "title": "L'INTERDISCIPLINARITe EN RECHERCHE À TRAVERS LE PRISME DES SCIENCES COGNITIVES",
+          "description": "Une exploration approfondie de l'approche interdisciplinaire dans la recherche moderne, en mettant l'accent sur les sciences cognitives et leur impact sur l'innovation technologique.",
+          "date": "Oct, 2024",
+          "category": "Seminaires",
+          "categoryColor": "#4F46E5",
+          "image": "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+        },
+        {
+          "id": 2,
+          "title": "L'interdisciplinarite en recherche à travers le prisme des sciences cognitives",
+          "description": "Decouvrez comment les differentes disciplines scientifiques collaborent pour resoudre des problèmes complexes dans le domaine des sciences cognitives.",
+          "date": "Dec, 2024",
+          "category": "Seminaires",
+          "categoryColor": "#4F46E5",
+          "image": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+        },
+        {
+          "id": 3,
+          "title": "Nouvelles avancees en intelligence artificielle et apprentissage automatique",
+          "description": "Decouvrez les dernières innovations en IA qui transforment notre approche de la recherche et du developpement technologique.",
+          "date": "Nov, 2024",
+          "category": "News",
+          "categoryColor": "#059669",
+          "image": "https://images.unsplash.com/photo-1555949963-aa79dcee981c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+        },
+        {
+          "id": 4,
+          "title": "Symposium international sur la cybersecurite",
+          "description": "Un evenement majeur rassemblant les experts mondiaux en cybersecurite pour discuter des defis actuels et futurs.",
+          "date": "Nov, 2024",
+          "category": "News",
+          "categoryColor": "#059669",
+          "image": "https://images.unsplash.com/photo-1563013544-824ae1b704d3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+        },
+        {
+          "id": 5,
+          "title": "Workshop: Le rôle des acteurs non-etatiques dans l'amelioration des synergies",
+          "description": "Un atelier pratique explorant comment les differents acteurs peuvent collaborer pour creer des synergies efficaces dans la recherche.",
+          "date": "Nov, 2024",
+          "category": "Workshops",
+          "categoryColor": "#DC2626",
+          "image": "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+        },
+        {
+          "id": 6,
+          "title": "Celebration des 10 ans du laboratoire LCSI",
+          "description": "Rejoignez-nous pour celebrer une decennie d'innovation, de recherche et de collaboration au sein de notre laboratoire.",
+          "date": "Nov, 2024",
+          "category": "Celebrations",
+          "categoryColor": "#7C2D12",
+          "image": "https://images.unsplash.com/photo-1511578314322-379afb476865?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+        }
+      ]
+    },
+    "publicationsSection": {
+      "title": "DERNIERES PUBLICATIONS",
+      "buttonText": "Voir tout"
+    },
+    "MembersSection": {
+      "sectionTitle": "MEMBRES",
+      "buttonText": "Voir tout"
+    }
+  },
+  "PresentationPage": {
+    "hero": {
+      "title": "Presentation du Laboratoire",
+      "subtitle": "LCSI - Laboratoire de la Communication dans les Systèmes Informatiques"
+    },
+    "lcsi": {
+      "title": "Le LCSI",
+      "description": "Le LCSI (Laboratoire de la Communication dans les Systèmes Informatiques) est un centre de recherche specialise de l’ESI, dedie à l’etude et au developpement de solutions dans des domaines cles de l’informatique, tels que l’intelligence artificielle, les bases de donnees avancees, les systèmes distribues et les mathematiques appliquees. Il regroupe plusieurs equipes de recherche actives, encadrant des etudiants en master et en doctorat. Le laboratoire joue un rôle central dans la formation avancee et la production scientifique de l’ecole, et participe à des projets nationaux (PRFU) ainsi qu’à des collaborations academiques, renforçant ainsi la visibilite de la recherche à l’ESI."
+    },
+    "equipe": {
+      "title": "Notre Equipe",
+      "description": "Le LCSI regroupe une equipe pluridisciplinaire de chercheurs et enseignants-chercheurs, appuyes par des doctorants et etudiants en master. Le laboratoire est structure autour de quatre equipes de recherche couvrant des domaines varies : bases de donnees, intelligence artificielle, mathematiques appliquees, et systèmes distribues. Chaque equipe est dirigee par un responsable scientifique, et le laboratoire est coordonne par un directeur assiste d’un comite de pilotage."
+    },
+    "thematiques": {
+      "title": "Nos Thematiques",
+      "description": "Le LCSI est un laboratoire de recherche appliquee qui explore plusieurs domaines de l’informatique avancee, comme les systèmes repartis, les bases de donnees post-relationnelles, l’intelligence artificielle, le traitement d’images, la fouille de donnees et les mathematiques appliquees. Il s’interesse aussi à l’analyse semantique, la visualisation spatio-temporelle et les technologies emergentes en science des donnees. Ses travaux aboutissent à des publications, des prototypes et contribuent à la formation par la recherche, souvent en collaboration avec d'autres laboratoires ou partenaires industriels."
+    },
+    "local": {
+      "title": "Notre Local",
+      "description": "Le LCSI est situe au sein du campus de l’ecole Nationale Superieure d’Informatique (ESI) à Oued Smar, Alger. Le laboratoire occupe une superficie d’environ 200 m² repartis sur plusieurs bureaux et salles de travail. Ces locaux permettent l’accueil des chercheurs, enseignants, doctorants et etudiants en projet. Le laboratoire dispose egalement d’un espace pour les reunions scientifiques et les encadrements, assurant un environnement propice à la recherche collaborative et à l’innovation"
+    }
+  },
+  "TeamsPage": {
+    "title": "equipes",
+    "description": "Decouvrez les differentes equipes qui composent notre laboratoire et leurs domaines d'expertise.",
+    "members": "Membres",
+    "projects": "Projets",
+    "buttonText": "Savoir Plus"
+  },
+  "TeamDetail": {
+    "expertise": "NOTRE EXPERTISE",
+    "domains": "Domaines d'application",
+    "technologies": "Technologies utilisees",
+    "expertises": "Nos expertises",
+    "domainsApplication": "Nos domaines d'application",
+    "valueAdded": "Notre valeur ajoutee",
+    "keywords": "Mots-cles"
+  },
+  "PublicationsPage": {
+    "title": "Publications",
+    "description": "Explorez nos publications recentes et les contributions de notre laboratoire à la recherche scientifique.",
+    "filters": {
+      "allTeams": "Toutes les equipes",
+      "allYears": "Toutes les annees",
+      "teams": {
+        "DDD": "Distribution Dynamique de Donnees",
+        "BDA": "Bases de Donnees Avancees",
+        "PI": "Processus Intelligents",
+        "MA": "Mathematiques Appliquees"
+      }
+    },
+    "showMore": "Afficher plus",
+    "noResults": "Aucune publication trouvee pour les critères selectionnes."
+  },
+  "MembersPage": {
+    "title": "Membres",
+    "description": "Rencontrez les membres de notre laboratoire, leurs rôles et leurs contributions.",
+    "filters": {
+      "allTeams": "Toutes les equipes",
+      "teams": {
+        "DDD": "Distribution Dynamique de Donnees",
+        "BDA": "Bases de Donnees Avancees",
+        "PI": "Processus Intelligents",
+        "MA": "Mathematiques Appliquees"
+      }
+    },
+    "noResults": "Aucun membre trouve pour l'equipe selectionnee."
+  },
+  "NewsPage": {
+    "title": "Actualites",
+    "description": "Restez informe des dernières nouvelles et evenements de notre laboratoire.",
+    "bottomPage": "Toutes les actualités ont été chargées",
+    "noResults": "Aucune actualité disponible pour le moment.",
+    "backToNews": "Retour aux actualités",
+    "eventDateLabel": "Événement le",
+    "publishedAtLabel": "Publié le",
+    "updatedAtLabel": "Dernière mise à jour :"
+  },
+  "Footer": {
+    "info": {
+      "title": "Info",
+      "address": "Adresse:",
+      "fax": "Fax:",
+      "tel": "Tel:"
+    },
+    "contact": {
+      "title": "Contact",
+      "director": "Directeur:"
+    },
+    "explore": {
+      "title": "Explorer plus",
+      "presentation": "Presentation du Labo",
+      "teams": "equipe",
+      "publications": "Publications",
+      "members": "Membres",
+      "news": "Actualites"
+    },
+    "legal": {
+      "copyright": "Tous droits reserves.",
+      "privacy": "Politique de confidentialite",
+      "terms": "Conditions d'utilisation"
+    }
+  },
+  "TeamContact": {
+    "title": "Contact",
+    "teamLeader": "Chef d'équipe",
+    "teamEmail": "Email du laboratoire",
+    "info": "Pour toute demande d'information ou collaboration"
+  },
+    "MemberComp": {
+      "TeamMember": "Membre de l'équipe",
+      "TeamLeader": "Chef de l'équipe"
+    }
+
+}
