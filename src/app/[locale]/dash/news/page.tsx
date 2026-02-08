@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import { useSession } from "next-auth/react";
+import { useAuth } from "@/components/AuthProvider";
 import {
   Search,
   Filter,
@@ -60,7 +60,7 @@ const CONTENT_TYPES = [
 ];
 
 export default function NewsPage() {
-  const { data: session } = useSession();
+  const { user } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTypes, setSelectedTypes] = useState<ContentType[]>([]);
   const [showFilters, setShowFilters] = useState(false);
@@ -70,7 +70,7 @@ export default function NewsPage() {
     null
   );
 
-  const userRole = (session?.user as any)?.role || "MEMBER";
+  const userRole = user?.role || "MEMBER";
   const isAdmin = userRole === "ADMIN";
 
   // États pour l'édition/suppression
@@ -82,7 +82,7 @@ export default function NewsPage() {
   // Récupérer l'ID du profil membre de l'utilisateur
   useEffect(() => {
     async function fetchUserMemberId() {
-      if (!session?.user?.email) return;
+      if (!user?.email) return;
 
       try {
         const response = await fetch("/api/profile");
@@ -101,7 +101,7 @@ export default function NewsPage() {
     }
 
     fetchUserMemberId();
-  }, [session]);
+  }, [user]);
 
   // Charger les actualités
   const fetchNews = async () => {

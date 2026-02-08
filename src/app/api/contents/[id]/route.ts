@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { auth } from "@/lib/auth";
+import { getSession } from "@/lib/session";
 
 // GET /api/contents/[id] - Public (récupérer un contenu spécifique)
 export async function GET(
@@ -40,7 +40,7 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await auth();
+    const session = await getSession();
 
     if (!session?.user?.email) {
       return NextResponse.json({ error: "Non authentifié" }, { status: 401 });
@@ -162,7 +162,7 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await auth();
+    const session = await getSession();
 
     if (!session?.user?.email) {
       return NextResponse.json({ error: "Non authentifié" }, { status: 401 });

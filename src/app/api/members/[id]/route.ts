@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { auth } from "@/lib/auth";
+import { getSession } from "@/lib/session";
 import { Language } from "@/generated/prisma";
 import { url } from "inspector";
 
@@ -134,7 +134,7 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await auth();
+    const session = await getSession();
     if (!session) {
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
     }
@@ -274,7 +274,7 @@ export async function DELETE(
 ) {
   const { id } = await params;
   try {
-    const session = await auth();
+    const session = await getSession();
     if (!session) {
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
     }

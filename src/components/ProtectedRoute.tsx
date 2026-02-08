@@ -1,6 +1,6 @@
 "use client";
 
-import { useSession } from "next-auth/react";
+import { useAuth } from "@/components/AuthProvider";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -9,21 +9,21 @@ interface ProtectedRouteProps {
 }
 
 export default function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const { data: session, status } = useSession();
+  const { user, isLoading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (status === "loading") return; // Attendre que la session soit chargée
+    if (isLoading) return; // Attendre que la session soit chargée
 
-    if (!session) {
+    if (!user) {
       // Rediriger vers la page de connexion si pas connecté
       router.push("/auth/signin");
       return;
     }
-  }, [session, status, router]);
+  }, [user, isLoading, router]);
 
   // Afficher un loader pendant la vérification
-  if (status === "loading") {
+  if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-grayRectangle">
         <div className="text-center">
@@ -37,7 +37,7 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   }
 
   // Afficher un loader pendant la redirection si pas connecté
-  if (!session) {
+  if (!user) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-grayRectangle">
         <div className="text-center">

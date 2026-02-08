@@ -315,11 +315,10 @@ export default function EditPublicationDialog({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-darkgrayTxt mb-2">
-                    Titre (Français) *
+                    Titre (Français)
                   </label>
                   <input
                     type="text"
-                    required
                     value={formData.title_fr}
                     onChange={(e) =>
                       setFormData({ ...formData, title_fr: e.target.value })
@@ -329,11 +328,10 @@ export default function EditPublicationDialog({
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-darkgrayTxt mb-2">
-                    Titre (English) *
+                    Titre (English)
                   </label>
                   <input
                     type="text"
-                    required
                     value={formData.title_en}
                     onChange={(e) =>
                       setFormData({ ...formData, title_en: e.target.value })
@@ -465,11 +463,10 @@ export default function EditPublicationDialog({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-darkgrayTxt mb-2">
-                    Journal *
+                    Journal
                   </label>
                   <input
                     type="text"
-                    required
                     value={formData.journal}
                     onChange={(e) =>
                       setFormData({ ...formData, journal: e.target.value })
@@ -480,11 +477,10 @@ export default function EditPublicationDialog({
                 <div>
                   <label className="block text-sm font-medium text-darkgrayTxt mb-2">
                     <Calendar size={16} className="inline mr-1" />
-                    Date de publication *
+                    Date de publication
                   </label>
                   <input
                     type="date"
-                    required
                     value={formData.publishedAt}
                     onChange={(e) =>
                       setFormData({
@@ -598,7 +594,7 @@ export default function EditPublicationDialog({
               <div>
                 <label className="block text-sm font-medium text-darkgrayTxt mb-2">
                   <Users size={16} className="inline mr-1" />
-                  Auteurs *
+                  Auteurs
                 </label>
 
                 {/* Selected Authors with reorder */}
@@ -708,12 +704,7 @@ export default function EditPublicationDialog({
                 </button>
                 <button
                   type="submit"
-                  disabled={
-                    loading ||
-                    !formData.title_fr ||
-                    !formData.title_en ||
-                    formData.selectedAuthors.length === 0
-                  }
+                  disabled={loading}
                   className="px-6 py-2 bg-mainBlue text-white rounded-lg hover:bg-mainBlue/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                 >
                   {loading ? (

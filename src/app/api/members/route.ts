@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { auth } from "@/lib/auth";
+import { getSession } from "@/lib/session";
 import { Language, MemberPosition } from "@/generated/prisma";
 
 // Mapping des positions français vers l'enum Prisma
@@ -138,7 +138,7 @@ export async function GET(request: NextRequest) {
 // POST - Créer un nouveau membre
 export async function POST(request: NextRequest) {
   try {
-    const session = await auth();
+    const session = await getSession();
     if (!session) {
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
     }
@@ -170,27 +170,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Valider les traductions
-    if (!translations || !translations.FR || !translations.EN) {
-      return NextResponse.json(
-        { error: "Les traductions FR et EN sont requises" },
-        { status: 400 }
-      );
-    }
-
-    if (!translations.FR.bio || !translations.FR.institution) {
-      return NextResponse.json(
-        { error: "Traduction française manquante (bio, institution)" },
-        { status: 400 }
-      );
-    }
-
-    if (!translations.EN.bio || !translations.EN.institution) {
-      return NextResponse.json(
-        { error: "Traduction anglaise manquante (bio, institution)" },
-        { status: 400 }
-      );
-    }
+    // Bio and institution are now optional - only validate that translations object exists
+    // We'll provide empty strings as defaults if not provided
 
     // Convertir la position française vers l'enum Prisma
     const prismaPosition = positionMapping[position];
@@ -235,16 +216,17 @@ export async function POST(request: NextRequest) {
     });
 
     // Créer le nouveau membre avec ses traductions
+    // Use empty strings as defaults for optional bio and institution fields
     const translationsData = [
       {
         language: "FR" as Language,
-        bio: translations.FR.bio,
-        institution: translations.FR.institution,
+        bio: translations?.FR?.bio || "",
+        institution: translations?.FR?.institution || "",
       },
       {
         language: "EN" as Language,
-        bio: translations.EN.bio,
-        institution: translations.EN.institution,
+        bio: translations?.EN?.bio || "",
+        institution: translations?.EN?.institution || "",
       },
     ];
 

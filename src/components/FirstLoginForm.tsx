@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
+import { useAuth } from "@/components/AuthProvider";
 import { User, Building, Users, Phone, FileText, Loader2 } from "lucide-react";
 import { useTeams } from "@/hooks/useTeams";
 import { membersAPI } from "@/lib/api";
@@ -37,7 +37,7 @@ interface ProfileFormData {
 }
 
 export default function FirstLoginForm() {
-  const { data: session, update } = useSession();
+  const { user, refresh } = useAuth();
   const router = useRouter();
   const { data: teamsData, loading: teamsLoading } = useTeams();
   const { notifyProfileCreated } = useProfileState();
@@ -46,9 +46,9 @@ export default function FirstLoginForm() {
 
   // Extraire firstname et lastname du nom Google
   const getFirstLastName = () => {
-    if (!session?.user?.name) return { firstname: "", lastname: "" };
+    if (!user?.name) return { firstname: "", lastname: "" };
 
-    const nameParts = session.user.name.trim().split(" ");
+    const nameParts = user.name.trim().split(" ");
     if (nameParts.length === 1) {
       return { firstname: nameParts[0], lastname: "" };
     }
@@ -69,7 +69,7 @@ export default function FirstLoginForm() {
     teamSlug: "",
     gender: "",
     phone: "",
-    image: session?.user?.image || "",
+    image: user?.image || "",
     isTeamLeader: false,
     bio_fr: "",
     institution_fr: "",
@@ -79,9 +79,9 @@ export default function FirstLoginForm() {
 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  // Mettre à jour firstname et lastname quand la session est chargée
+  // Mettre à jour firstname et lastname quand l'utilisateur est chargé
   useEffect(() => {
-    if (session?.user?.name) {
+    if (user?.name) {
       const { firstname, lastname } = getFirstLastName();
       setFormData((prev) => ({
         ...prev,
@@ -89,15 +89,15 @@ export default function FirstLoginForm() {
         lastname,
       }));
     }
-  }, [session?.user?.name]);
+  }, [user?.name]);
 
-  // Mettre à jour l'image automatiquement selon le genre si pas de photo de session
+  // Mettre à jour l'image automatiquement selon le genre si pas de photo utilisateur
   useEffect(() => {
-    if (!session?.user?.image && formData.gender) {
+    if (!user?.image && formData.gender) {
       const defaultImage = formData.gender === "MALE" ? man.src : woman.src;
       setFormData((prev) => ({ ...prev, image: defaultImage }));
     }
-  }, [formData.gender, session?.user?.image]); // Format teams data for dropdown
+  }, [formData.gender, user?.image]); // Format teams data for dropdown
   const teams = teamsData?.teams
     ? [
         { value: "", label: "Sélectionner une équipe" },
@@ -133,21 +133,9 @@ export default function FirstLoginForm() {
       newErrors.firstname = "Le prénom est requis";
     if (!formData.lastname.trim()) newErrors.lastname = "Le nom est requis";
     if (!formData.position) newErrors.position = "La position est requise";
-    if (!formData.teamSlug) newErrors.teamSlug = "L'équipe est requise";
     if (!formData.gender) newErrors.gender = "Le genre est requis";
-    if (!formData.phone.trim()) newErrors.phone = "Le téléphone est requis";
 
-    // Champs traduits obligatoires (FR)
-    if (!formData.bio_fr.trim())
-      newErrors.bio_fr = "La biographie (FR) est requise";
-    if (!formData.institution_fr.trim())
-      newErrors.institution_fr = "L'institution (FR) est requise";
-
-    // Champs traduits obligatoires (EN)
-    if (!formData.bio_en.trim())
-      newErrors.bio_en = "La biographie (EN) est requise";
-    if (!formData.institution_en.trim())
-      newErrors.institution_en = "L'institution (EN) est requise";
+    // Team, phone, biography, and institution fields are now optional
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -156,8 +144,8 @@ export default function FirstLoginForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!session?.user?.email) {
-      alert("Informations de session manquantes");
+    if (!user?.email) {
+      alert("Informations utilisateur manquantes");
       return;
     }
 
@@ -170,7 +158,7 @@ export default function FirstLoginForm() {
       const memberData = {
         firstname: formData.firstname,
         lastname: formData.lastname,
-        email: session.user.email,
+        email: user.email,
         phone: formData.phone,
         gender: formData.gender as "MALE" | "FEMALE",
         position: formData.position,
@@ -194,10 +182,10 @@ export default function FirstLoginForm() {
       // Notifier que le profil a été créé
       notifyProfileCreated();
 
-      // Forcer le rechargement de la session pour mettre à jour les états
-      await update();
+      // Forcer le rechargement de l'utilisateur pour mettre à jour les états
+      await refresh();
 
-      // Rediriger vers le dashboard avec un délai pour laisser le temps à la session de se mettre à jour
+      // Rediriger vers le dashboard avec un délai pour laisser le temps à l'état de se mettre à jour
       setTimeout(() => {
         router.push("/fr/dash");
         router.refresh();
@@ -225,8 +213,8 @@ export default function FirstLoginForm() {
           </p>
           <div className="bg-blue-50 rounded-lg p-4 mt-4">
             <p className="text-sm text-blue-800">
-              <strong>Connecté en tant que :</strong> {session?.user?.name} (
-              {session?.user?.email})
+              <strong>Connecté en tant que :</strong> {user?.name} (
+              {user?.email})
             </p>
           </div>
         </div>
@@ -304,7 +292,7 @@ export default function FirstLoginForm() {
             <div>
               <label className="block text-sm font-medium text-darkgrayTxt mb-2">
                 <Users size={16} className="inline mr-1" />
-                Equipe *
+                Equipe (optionnel)
               </label>
               <select
                 value={formData.teamSlug}
@@ -351,7 +339,7 @@ export default function FirstLoginForm() {
             <div>
               <label className="block text-sm font-medium text-darkgrayTxt mb-2">
                 <Phone size={16} className="inline mr-1" />
-                Téléphone *
+                Téléphone (optionnel)
               </label>
               <input
                 type="tel"
@@ -381,8 +369,8 @@ export default function FirstLoginForm() {
                   className="w-16 h-16 rounded-full object-cover"
                 />
                 <div className="text-sm text-gray-600">
-                  {session?.user?.image
-                    ? "Photo récupérée depuis votre compte Google"
+                  {user?.image
+                    ? "Photo récupérée depuis votre compte"
                     : "Photo par défaut selon votre genre"}
                 </div>
               </div>
@@ -392,14 +380,14 @@ export default function FirstLoginForm() {
           {/* Biographies (FR et EN côte à côte) */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-darkgrayTxt border-b border-grayBorder pb-2">
-              Biographies (Français et Anglais) *
+              Biographies (Français et Anglais) - Optionnel
             </h3>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               {/* Biographie FR */}
               <div>
                 <label className="block text-sm font-medium text-darkgrayTxt mb-2">
-                  🇫🇷 Biographie (Français) *
+                  🇫🇷 Biographie (Français)
                 </label>
                 <textarea
                   value={formData.bio_fr}
@@ -418,7 +406,7 @@ export default function FirstLoginForm() {
               {/* Biographie EN */}
               <div>
                 <label className="block text-sm font-medium text-darkgrayTxt mb-2">
-                  🇬🇧 Biography (English) *
+                  🇬🇧 Biography (English)
                 </label>
                 <textarea
                   value={formData.bio_en}
@@ -439,14 +427,14 @@ export default function FirstLoginForm() {
           {/* Institutions (FR et EN côte à côte) */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-darkgrayTxt border-b border-grayBorder pb-2">
-              Institutions (Français et Anglais) *
+              Institutions (Français et Anglais) - Optionnel
             </h3>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               {/* Institution FR */}
               <div>
                 <label className="block text-sm font-medium text-darkgrayTxt mb-2">
-                  🇫🇷 Institution (Français) *
+                  🇫🇷 Institution (Français)
                 </label>
                 <input
                   type="text"
@@ -471,7 +459,7 @@ export default function FirstLoginForm() {
               {/* Institution EN */}
               <div>
                 <label className="block text-sm font-medium text-darkgrayTxt mb-2">
-                  🇬🇧 Institution (English) *
+                  🇬🇧 Institution (English)
                 </label>
                 <input
                   type="text"

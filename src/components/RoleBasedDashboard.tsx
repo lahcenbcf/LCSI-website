@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
+import { useAuth } from "@/components/AuthProvider";
 import { useRouter, usePathname } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import FirstLoginForm from "@/components/FirstLoginForm";
@@ -14,7 +14,7 @@ interface RoleBasedDashboardProps {
 export default function RoleBasedDashboard({
   children,
 }: RoleBasedDashboardProps) {
-  const { data: session, status } = useSession();
+  const { user, isLoading } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
   const { profileCreated, resetProfileState } = useProfileState();
@@ -25,7 +25,7 @@ export default function RoleBasedDashboard({
 
   useEffect(() => {
     const checkRoleAndProfile = async () => {
-      if (status !== "authenticated" || !session?.user?.email) {
+      if (isLoading || !user?.email) {
         setLoading(false);
         return;
       }
@@ -53,7 +53,7 @@ export default function RoleBasedDashboard({
     };
 
     checkRoleAndProfile();
-  }, [session, status, pathname, router, profileCreated]);
+  }, [user, isLoading, pathname, router, profileCreated]);
 
   // Reset profile state après vérification
   useEffect(() => {
@@ -62,7 +62,7 @@ export default function RoleBasedDashboard({
     }
   }, [profileCreated, hasProfile, resetProfileState]);
 
-  if (loading || status === "loading") {
+  if (loading || isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -77,7 +77,7 @@ export default function RoleBasedDashboard({
   }
 
   // Si l'utilisateur @esi.dz n'a pas de profil membre, afficher le formulaire
-  if (session?.user?.email?.endsWith("@esi.dz") && hasProfile === false) {
+  if (user?.email?.endsWith("@esi.dz") && hasProfile === false) {
     return <FirstLoginForm />;
   }
 
@@ -88,7 +88,7 @@ export default function RoleBasedDashboard({
 
 
   // Si l'utilisateur n'est pas @esi.dz, bloquer l'accès
-  if (!session?.user?.email?.endsWith("@esi.dz")) {
+  if (!user?.email?.endsWith("@esi.dz")) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">

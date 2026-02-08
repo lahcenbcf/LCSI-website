@@ -1,6 +1,6 @@
 "use client";
 
-import { useSession } from "next-auth/react";
+import { useAuth } from "@/components/AuthProvider";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -15,28 +15,28 @@ export default function AuthGuard({
   requiredRole,
   redirectTo = "/auth/signin",
 }: AuthGuardProps) {
-  const { data: session, status } = useSession();
+  const { user, isLoading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (status === "loading") return;
+    if (isLoading) return;
 
     // Pas connecté -> rediriger vers login
-    if (!session) {
+    if (!user) {
       router.push(redirectTo);
       return;
     }
 
     // Vérifier le rôle si requis
-    if (requiredRole && session.user?.role !== requiredRole) {
+    if (requiredRole && user.role !== requiredRole) {
       // Si pas le bon rôle, rediriger vers une page d'erreur ou accueil
       router.push("/auth/error?error=AccessDenied");
       return;
     }
-  }, [session, status, router, requiredRole, redirectTo]);
+  }, [user, isLoading, router, requiredRole, redirectTo]);
 
   // Loading state
-  if (status === "loading") {
+  if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-grayRectangle">
         <div className="text-center">
@@ -48,7 +48,7 @@ export default function AuthGuard({
   }
 
   // Not authenticated
-  if (!session) {
+  if (!user) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-grayRectangle">
         <div className="text-center">
@@ -60,7 +60,7 @@ export default function AuthGuard({
   }
 
   // Wrong role
-  if (requiredRole && session.user?.role !== requiredRole) {
+  if (requiredRole && user.role !== requiredRole) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-grayRectangle">
         <div className="text-center">

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSession } from "next-auth/react";
+import { useAuth } from "@/components/AuthProvider";
 import {
   User,
   Mail,
@@ -240,7 +240,7 @@ const Section = ({ title, children, className = "" }: SectionProps) => {
 };
 
 export default function SettingsPage() {
-  const { data: session } = useSession();
+  const { user } = useAuth();
   const { data: teamsData, loading: teamsLoading } = useTeams();
 
   const [loading, setLoading] = useState(false);
@@ -284,7 +284,7 @@ export default function SettingsPage() {
   });
 
   const loadProfile = async () => {
-    if (!session?.user?.email) return;
+    if (!user?.email) return;
 
     setLoading(true);
     try {
@@ -295,7 +295,7 @@ export default function SettingsPage() {
       }
 
       const data = await response.json();
-      const baseImage = session.user.image || "";
+      const baseImage = user.image || "";
 
       const profileData: ProfileData = data.exists
         ? {
@@ -315,10 +315,10 @@ export default function SettingsPage() {
           }
         : {
             firstname:
-              (session.user.name || "").trim().split(" ").slice(1).join(" ") ||
+              (user.name || "").trim().split(" ").slice(1).join(" ") ||
               "",
-            lastname: (session.user.name || "").trim().split(" ")[0] || "",
-            email: session.user.email,
+            lastname: (user.name || "").trim().split(" ")[0] || "",
+            email: user.email,
             position: "",
             teamSlug: "",
             gender: "",
@@ -335,11 +335,11 @@ export default function SettingsPage() {
       setInitialProfile(profileData);
     } catch (error) {
       console.error("Erreur lors du chargement du profil:", error);
-      const nameParts = (session.user.name || "").trim().split(" ");
+      const nameParts = (user?.name || "").trim().split(" ");
       const profileData: ProfileData = {
         firstname: nameParts.slice(1).join(" ") || "",
         lastname: nameParts[0] || "",
-        email: session.user.email || "",
+        email: user?.email || "",
         position: "",
         teamSlug: "",
         gender: "",
@@ -348,7 +348,7 @@ export default function SettingsPage() {
         bio_en: "",
         institution_fr: "",
         institution_en: "",
-        image: session.user.image || "",
+        image: user?.image || "",
         isTeamLeader: false,
       };
       setProfile(profileData);
@@ -475,7 +475,7 @@ export default function SettingsPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <ProfileImage
-          image={session?.user?.image || profile.image}
+          image={user?.image || profile.image}
           gender={profile.gender}
         />
 

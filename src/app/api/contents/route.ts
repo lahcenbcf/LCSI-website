@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { auth } from "@/lib/auth";
+import { getSession } from "@/lib/session";
 import { ContentType } from "@/generated/prisma";
 
 // GET /api/contents - Public (liste tous les contenus)
@@ -58,7 +58,7 @@ export async function GET(request: NextRequest) {
 // POST /api/contents - Authenticated (créer un contenu)
 export async function POST(request: NextRequest) {
   try {
-    const session = await auth();
+    const session = await getSession();
 
     if (!session?.user?.email) {
       return NextResponse.json({ error: "Non authentifié" }, { status: 401 });

@@ -1,4 +1,4 @@
-import { useSession } from "next-auth/react";
+import { useAuth } from "@/components/AuthProvider";
 import { useEffect, useState } from "react";
 
 interface Publication {
@@ -18,16 +18,16 @@ export function useIsPublicationAuthor(publication: Publication | null): {
   canModify: boolean;
   loading: boolean;
 } {
-  const { data: session, status } = useSession();
+  const { user, isLoading } = useAuth();
   const [memberData, setMemberData] = useState<{ id: string } | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const userRole = (session?.user as any)?.role || "MEMBER";
+  const userRole = user?.role || "MEMBER";
   const isAdmin = userRole === "ADMIN";
 
   useEffect(() => {
     async function fetchMember() {
-      if (!session?.user?.email) {
+      if (!user?.email) {
         setLoading(false);
         return;
       }
@@ -48,7 +48,7 @@ export function useIsPublicationAuthor(publication: Publication | null): {
     }
 
     fetchMember();
-  }, [session]);
+  }, [user]);
 
   const isAuthor =
     !!memberData &&
@@ -61,6 +61,6 @@ export function useIsPublicationAuthor(publication: Publication | null): {
     isAuthor,
     isAdmin,
     canModify,
-    loading: status === "loading" || loading,
+    loading: isLoading || loading,
   };
 }

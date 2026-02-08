@@ -223,23 +223,8 @@ export default function CreatePublicationDialog({
   };
 
   const validateForm = (): boolean => {
-    const newErrors: Record<string, string> = {};
-
-    if (!formData.title_fr.trim())
-      newErrors.title_fr = "Le titre FR est requis";
-    if (!formData.title_en.trim())
-      newErrors.title_en = "Le titre EN est requis";
-    if (!formData.journal.trim()) newErrors.journal = "Le journal est requis";
-    if (!formData.publishedAt.trim()) {
-      newErrors.publishedAt = "La date de publication est requise";
-    }
-    if (!formData.team) newErrors.team = "L'équipe est requise";
-    if (formData.selectedAuthors.length === 0) {
-      newErrors.authors = "Au moins un auteur est requis";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    // All fields are now optional - no validation required
+    return true;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -378,7 +363,7 @@ export default function CreatePublicationDialog({
             {/* Titre - Bilingue */}
             <div className="space-y-4">
               <h3 className="text-sm font-medium text-darkgrayTxt border-b border-grayBorder pb-2">
-                Titre (Français et Anglais) *
+                Titre (Français et Anglais)
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -516,7 +501,7 @@ export default function CreatePublicationDialog({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-darkgrayTxt mb-1">
-                    Journal/Conférence *
+                    Journal/Conférence
                   </label>
                   <input
                     type="text"
@@ -539,7 +524,7 @@ export default function CreatePublicationDialog({
                 <div>
                   <label className="block text-sm font-medium text-darkgrayTxt mb-1">
                     <Building size={16} className="inline mr-1" />
-                    Équipe *
+                    Équipe
                   </label>
                   <select
                     value={formData.team}
@@ -566,7 +551,7 @@ export default function CreatePublicationDialog({
                 <div>
                   <label className="block text-sm font-medium text-darkgrayTxt mb-1">
                     <Calendar size={16} className="inline mr-1" />
-                    Date de publication *
+                    Date de publication
                   </label>
                   <input
                     type="date"
@@ -662,7 +647,7 @@ export default function CreatePublicationDialog({
             <div className="space-y-4">
               <h3 className="text-sm font-medium text-darkgrayTxt border-b border-grayBorder pb-2">
                 <Users size={16} className="inline mr-1" />
-                Auteurs *
+                Auteurs
               </h3>
               {errors.authors && (
                 <p className="text-red-500 text-sm">{errors.authors}</p>

@@ -6,7 +6,7 @@ import { logo } from "@/assets";
 import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 import LanguageSwitcher from "./LanguageSwitcher";
-import {  Menu } from "lucide-react";
+import { Menu, User, LogIn, LayoutDashboard } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -14,9 +14,14 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "./ui/sheet";
-import { usePathname } from "next/navigation";
+import { usePathname, useParams } from "next/navigation";
+import { useAuth } from "./AuthProvider";
+
 export default function Header() {
   const t = useTranslations("Header");
+  const { user, isLoading } = useAuth();
+  const params = useParams();
+  const locale = params.locale as string;
 
   const navItems = [
     { key: "presentation", href: "/presentation" },
@@ -43,7 +48,7 @@ export default function Header() {
             <div className="flex gap-3 items-center">
               {/* Navigation items */}
               <nav className="container mx-auto px-4 py-2">
-                <ul className="flex gap-8 justify-end">
+                <ul className="flex gap-8 justify-end items-center">
                   {navItems.map((item) => (
                     <li key={item.key}>
                       <Link
@@ -60,6 +65,46 @@ export default function Header() {
               </nav>
               {/* lang switcher */}
               <LanguageSwitcher />
+              
+              {/* Auth Buttons */}
+              <div className="flex items-center gap-2 ml-4">
+                {isLoading ? (
+                  <div className="w-10 h-10 rounded-full bg-gray-200 animate-pulse" />
+                ) : user ? (
+                  <Link
+                    href="/dash"
+                    className="flex items-center gap-2 px-4 py-2 bg-mainBlue text-white rounded-lg hover:bg-mainBlue/90 transition-all duration-200 shadow-md hover:shadow-lg"
+                  >
+                    {user.image ? (
+                      <img
+                        src={user.image}
+                        alt={user.name || "User"}
+                        className="w-6 h-6 rounded-full object-cover"
+                      />
+                    ) : (
+                      <LayoutDashboard size={18} />
+                    )}
+                    <span className="font-medium text-sm">Dashboard</span>
+                  </Link>
+                ) : (
+                  <>
+                    <Link
+                      href="/auth/signin"
+                      className="flex items-center gap-2 px-4 py-2 text-mainBlue border border-mainBlue rounded-lg hover:bg-mainBlue/5 transition-all duration-200"
+                    >
+                      <LogIn size={18} />
+                      <span className="font-medium text-sm">Connexion</span>
+                    </Link>
+                    <Link
+                      href="/auth/register"
+                      className="flex items-center gap-2 px-4 py-2 bg-mainBlue text-white rounded-lg hover:bg-mainBlue/90 transition-all duration-200 shadow-md hover:shadow-lg"
+                    >
+                      <User size={18} />
+                      <span className="font-medium text-sm">S'inscrire</span>
+                    </Link>
+                  </>
+                )}
+              </div>
             </div>
             {/* Navigation sidbar -- phone / tablet screeen */}
           </div>
@@ -74,6 +119,49 @@ export default function Header() {
             className="min-w-1/2 w-64 bg-white border-l-2 border-grayBorder"
           >
             <div className="flex flex-col gap-3 p-4 mt-12">
+              {/* Auth Buttons - Mobile */}
+              <div className="flex flex-col gap-2 mb-4 pb-4 border-b border-grayBorder">
+                {isLoading ? (
+                  <div className="w-full h-10 rounded-lg bg-gray-200 animate-pulse" />
+                ) : user ? (
+                  <Link
+                    href="/dash"
+                    className="flex items-center gap-3 px-4 py-3 bg-mainBlue text-white rounded-lg hover:bg-mainBlue/90 transition-all duration-200"
+                  >
+                    {user.image ? (
+                      <img
+                        src={user.image}
+                        alt={user.name || "User"}
+                        className="w-8 h-8 rounded-full object-cover"
+                      />
+                    ) : (
+                      <LayoutDashboard size={20} />
+                    )}
+                    <div className="flex flex-col">
+                      <span className="font-medium text-sm">Dashboard</span>
+                      <span className="text-xs text-white/70">{user.email}</span>
+                    </div>
+                  </Link>
+                ) : (
+                  <>
+                    <Link
+                      href="/auth/signin"
+                      className="flex items-center justify-center gap-2 px-4 py-3 text-mainBlue border border-mainBlue rounded-lg hover:bg-mainBlue/5 transition-all duration-200"
+                    >
+                      <LogIn size={18} />
+                      <span className="font-medium">Connexion</span>
+                    </Link>
+                    <Link
+                      href="/auth/register"
+                      className="flex items-center justify-center gap-2 px-4 py-3 bg-mainBlue text-white rounded-lg hover:bg-mainBlue/90 transition-all duration-200"
+                    >
+                      <User size={18} />
+                      <span className="font-medium">S'inscrire</span>
+                    </Link>
+                  </>
+                )}
+              </div>
+              
               {/* Navigation items */}
               <nav className="flex flex-col gap-4">
                 {navItems.map((item) => (

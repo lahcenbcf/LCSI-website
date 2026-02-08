@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import { useSession } from "next-auth/react";
+import { useAuth } from "@/components/AuthProvider";
 import {
   Search,
   Filter,
@@ -54,7 +54,7 @@ const getAuthorsString = (authors: Publication["authors"]): string[] => {
 };
 
 export default function PublicationsPage() {
-  const { data: session } = useSession();
+  const { user } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTeams, setSelectedTeams] = useState<string[]>([]);
   const [showFilters, setShowFilters] = useState(false);
@@ -67,12 +67,12 @@ export default function PublicationsPage() {
     null
   );
 
-  const userRole = (session?.user as any)?.role || "MEMBER";
+  const userRole = user?.role || "MEMBER";
   const isAdmin = userRole === "ADMIN";
 
   useEffect(() => {
     async function fetchUserMemberId() {
-      if (!session?.user?.email) return;
+      if (!user?.email) return;
 
       try {
         const response = await fetch("/api/profile");
@@ -91,7 +91,7 @@ export default function PublicationsPage() {
     }
 
     fetchUserMemberId();
-  }, [session]);
+  }, [user]);
 
   // Edit/Delete states
   const [editingPublication, setEditingPublication] =

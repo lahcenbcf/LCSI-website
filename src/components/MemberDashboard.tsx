@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSession } from "next-auth/react";
+import { useAuth } from "@/components/AuthProvider";
 import {
   Users,
   FileText,
@@ -52,7 +52,7 @@ interface TeamPublication {
 }
 
 export default function MemberDashboard() {
-  const { data: session } = useSession();
+  const { user } = useAuth();
   const [userRole, setUserRole] = useState<UserRole | null>(null);
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [teamPublications, setTeamPublications] = useState<TeamPublication[]>(
@@ -94,10 +94,10 @@ export default function MemberDashboard() {
       }
     };
 
-    if (session) {
+    if (user) {
       fetchData();
     }
-  }, [session]);
+  }, [user]);
 
   if (loading) {
     return (
@@ -135,7 +135,7 @@ export default function MemberDashboard() {
                 Dashboard Membre
               </h1>
               <p className="text-lightgrayTxt">
-                Bienvenue, {session?.user?.name}
+                Bienvenue, {user?.name}
               </p>
             </div>
             {userRole.isTeamLeader && (
@@ -158,10 +158,10 @@ export default function MemberDashboard() {
               </h2>
               <div className="space-y-4">
                 <div className="flex items-center space-x-3">
-                  {session?.user?.image ? (
+                  {user?.image ? (
                     <Image
-                      src={session.user.image}
-                      alt={session.user.name || "Photo de profil"}
+                      src={user.image}
+                      alt={user.name || "Photo de profil"}
                       width={48}
                       height={48}
                       className="rounded-full"
@@ -173,10 +173,10 @@ export default function MemberDashboard() {
                   )}
                   <div>
                     <p className="font-medium text-darkgrayTxt">
-                      {session?.user?.name}
+                      {user?.name}
                     </p>
                     <p className="text-sm text-lightgrayTxt">
-                      {session?.user?.email}
+                      {user?.email}
                     </p>
                   </div>
                 </div>

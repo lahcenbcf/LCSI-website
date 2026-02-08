@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
+import { getSession } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
 
 // GET - Obtenir le rôle de l'utilisateur connecté
 export async function GET(request: NextRequest) {
   try {
-    const session = await auth();
+    const session = await getSession();
     if (!session?.user?.email) {
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
     }

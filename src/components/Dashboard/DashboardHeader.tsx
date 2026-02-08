@@ -1,11 +1,10 @@
 "use client";
 
-import { useSession } from "next-auth/react";
+import { useAuth } from "@/components/AuthProvider";
 import Image from "next/image";
-import { Bell, Search, ChevronDown } from "lucide-react";
 
 export default function DashboardHeader() {
-  const { data: session } = useSession();
+  const { user } = useAuth();
 
   return (
     <header className="bg-white border-b border-grayBorder px-6 py-4">
@@ -15,18 +14,18 @@ export default function DashboardHeader() {
           <div className="flex items-center space-x-3">
             <div className="text-right">
               <p className="text-sm font-medium text-darkgrayTxt">
-                {session?.user?.name || "Utilisateur"}
+                {user?.name || "Utilisateur"}
               </p>
               <p className="text-xs text-lightgrayTxt">
-                {session?.user?.role || "Membre"}
+                {user?.role || "Membre"}
               </p>
             </div>
 
             <div className="relative">
-              {session?.user?.image ? (
+              {user?.image ? (
                 <Image
-                  src={session.user.image}
-                  alt={session.user.name || "Profile"}
+                  src={user.image}
+                  alt={user.name || "Profile"}
                   width={40}
                   height={40}
                   className="rounded-full ring-2 ring-mainBlue ring-offset-2"
@@ -34,7 +33,7 @@ export default function DashboardHeader() {
               ) : (
                 <div className="w-10 h-10 bg-mainBlue rounded-full flex items-center justify-center ring-2 ring-mainBlue ring-offset-2">
                   <span className="text-white font-semibold text-sm">
-                    {session?.user?.name?.charAt(0)?.toUpperCase() || "U"}
+                    {user?.name?.charAt(0)?.toUpperCase() || "U"}
                   </span>
                 </div>
               )}

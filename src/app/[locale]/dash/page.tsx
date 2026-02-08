@@ -1,6 +1,6 @@
 "use client";
 
-import { useSession } from "next-auth/react";
+import { useAuth } from "@/components/AuthProvider";
 import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
 import { useState, useEffect } from "react";
@@ -22,7 +22,7 @@ type Stats = {
 };
 
 export default function DashboardPage() {
-  const { data: session } = useSession();
+  const { user } = useAuth();
   const { canCreatePublications, canCreateTeams } = usePermissions();
   const router = useRouter();
   const params = useParams();
@@ -57,7 +57,7 @@ export default function DashboardPage() {
       <div className="bg-white rounded-lg p-6 shadow-sm border border-grayBorder">
         <div>
           <h1 className="text-2xl font-bold text-darkgrayTxt font-integralCF mb-2">
-            Bienvenue, {session?.user?.name?.split(" ")[0]} 👋
+            Bienvenue, {user?.name?.split(" ")[0]} 👋
           </h1>
           <p className="text-lightgrayTxt">
             Voici un aperçu de l'activité du laboratoire LCSI aujourd'hui.

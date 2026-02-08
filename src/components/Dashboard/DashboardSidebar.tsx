@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { logo } from "@/assets";
 import {
   Home,
@@ -14,7 +14,7 @@ import {
   Calendar,
   BarChart3,
 } from "lucide-react";
-import { signOut } from "next-auth/react";
+import { useAuth } from "@/components/AuthProvider";
 import {
   Sheet,
   SheetClose,
@@ -60,6 +60,13 @@ const sidebarItems = [
 
 export default function DashboardSidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const { logout } = useAuth();
+
+  const handleLogout = async () => {
+    await logout();
+    router.push("/");
+  };
 
   return (
     <>
@@ -110,7 +117,7 @@ export default function DashboardSidebar() {
         {/* Desktop Logout */}
         <div className="p-4 border-t border-grayBorder">
           <button
-            onClick={() => signOut({ callbackUrl: "/" })}
+            onClick={handleLogout}
             className="flex items-center space-x-3 w-full px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200"
           >
             <LogOut size={20} />
@@ -172,7 +179,7 @@ export default function DashboardSidebar() {
             {/* Logout */}
             <SheetFooter className="p-4 border-t border-grayBorder">
               <button
-                onClick={() => signOut({ callbackUrl: "/" })}
+                onClick={handleLogout}
                 className="flex items-center space-x-3 w-full px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200"
               >
                 <LogOut size={20} />

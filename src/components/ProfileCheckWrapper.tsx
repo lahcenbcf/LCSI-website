@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
+import { useAuth } from "@/components/AuthProvider";
 import { useRouter, usePathname } from "next/navigation";
 import FirstLoginForm from "@/components/FirstLoginForm";
 import { Loader2 } from "lucide-react";
@@ -13,7 +13,7 @@ interface ProfileCheckWrapperProps {
 export default function ProfileCheckWrapper({
   children,
 }: ProfileCheckWrapperProps) {
-  const { data: session, status } = useSession();
+  const { user, isLoading } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
 
@@ -28,13 +28,13 @@ export default function ProfileCheckWrapper({
   useEffect(() => {
     const checkProfile = async () => {
       // Si pas connecté ou sur une page exclue, pas besoin de vérifier
-      if (status !== "authenticated" || !session?.user?.email || isExcluded) {
+      if (isLoading || !user?.email || isExcluded) {
         setLoading(false);
         return;
       }
 
       // Vérifier seulement pour les utilisateurs @esi.dz
-      if (!session.user.email.endsWith("@esi.dz")) {
+      if (!user.email.endsWith("@esi.dz")) {
         setLoading(false);
         return;
       }
@@ -57,12 +57,12 @@ export default function ProfileCheckWrapper({
     };
 
     checkProfile();
-  }, [session, status, pathname, router, isExcluded, isDashboardPath]);
+  }, [user, isLoading, pathname, router, isExcluded, isDashboardPath]);
 
   // Loading state - Afficher seulement pour les pages dashboard ou si authentifié
   if (
-    (loading || status === "loading") &&
-    (isDashboardPath || status === "authenticated")
+    (loading || isLoading) &&
+    (isDashboardPath || !!user)
   ) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -79,8 +79,7 @@ export default function ProfileCheckWrapper({
 
   // Si l'utilisateur n'a pas de profil et essaie d'accéder au dashboard
   if (
-    status === "authenticated" &&
-    session?.user?.email?.endsWith("@esi.dz") &&
+    user?.email?.endsWith("@esi.dz") &&
     hasProfile === false &&
     isDashboardPath
   ) {

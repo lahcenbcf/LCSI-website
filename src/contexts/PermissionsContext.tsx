@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
+import { useAuth } from "@/components/AuthProvider";
 
 interface PermissionsContextType {
   canEdit: boolean;
@@ -36,13 +36,13 @@ export function PermissionsProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const { data: session, status } = useSession();
+  const { user, isLoading } = useAuth();
   const [userRole, setUserRole] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchRole = async () => {
-      if (status !== "authenticated" || !session?.user?.email) {
+      if (isLoading || !user?.email) {
         setLoading(false);
         return;
       }
@@ -59,7 +59,7 @@ export function PermissionsProvider({
     };
 
     fetchRole();
-  }, [session, status]);
+  }, [user, isLoading]);
 
   // Permissions générales
   const canEdit = userRole === "ADMIN";
