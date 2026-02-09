@@ -1,10 +1,10 @@
 #!/bin/sh
-# start.sh
+set -e
 
-# Run migrations
 echo "Running database migrations..."
-npx prisma migrate deploy
+./node_modules/.bin/prisma migrate deploy --schema=./prisma/schema.prisma
 
-# Start the application
 echo "Starting Next.js app..."
 node server.js
+
+
