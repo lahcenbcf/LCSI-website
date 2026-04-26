@@ -14,6 +14,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
+import { Gender, MemberPosition, UserRole } from "@/generated/prisma";
 
 import { useMembers } from "@/hooks/useMembers";
 import { useTeams } from "@/hooks/useTeams";
@@ -31,6 +32,11 @@ export default function MembersPage() {
   const [newUserEmail, setNewUserEmail] = useState("");
   const [newUserPassword, setNewUserPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [newUserPosition, setNewUserPosition] = useState<MemberPosition>(
+    MemberPosition.ASSOCIATE_PROFESSOR,
+  );
+  const [newUserRole, setNewUserRole] = useState<UserRole>(UserRole.MEMBER);
+  const [newUserGender, setNewUserGender] = useState<Gender>(Gender.MALE);
   const [createError, setCreateError] = useState<string | null>(null);
   const [isCreating, setIsCreating] = useState(false);
   const [createSuccess, setCreateSuccess] = useState<string | null>(null);
@@ -61,6 +67,9 @@ export default function MembersPage() {
     setNewUserEmail("");
     setNewUserPassword("");
     setConfirmPassword("");
+    setNewUserPosition(MemberPosition.ASSOCIATE_PROFESSOR);
+    setNewUserRole(UserRole.MEMBER);
+    setNewUserGender(Gender.MALE);
     setCreateError(null);
   };
 
@@ -89,6 +98,9 @@ export default function MembersPage() {
           name: newUserName,
           email: newUserEmail,
           password: newUserPassword,
+          position: newUserPosition,
+          role: newUserRole,
+          gender: newUserGender,
         }),
       });
 
@@ -274,6 +286,64 @@ export default function MembersPage() {
                   placeholder="Mot de passe"
                   className="w-full rounded-lg border border-grayBorder px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
+              </div>
+
+              <div>
+                <label className="mb-1 block text-sm font-medium text-darkgrayTxt">
+                  Position
+                </label>
+                <select
+                  value={newUserPosition}
+                  onChange={(e) =>
+                    setNewUserPosition(e.target.value as MemberPosition)
+                  }
+                  className="w-full rounded-lg border border-grayBorder px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value={MemberPosition.PROFESSOR}>Professeur</option>
+                  <option value={MemberPosition.ASSOCIATE_PROFESSOR}>
+                    Maître de conférences
+                  </option>
+                  <option value={MemberPosition.ASSISTANT_PROFESSOR}>
+                    Professeur assistant
+                  </option>
+                  <option value={MemberPosition.LECTURER}>Enseignant</option>
+                  <option value={MemberPosition.RESEARCHER}>Chercheur</option>
+                  <option value={MemberPosition.PHD_STUDENT}>Doctorant</option>
+                  <option value={MemberPosition.MASTER_STUDENT}>
+                    Étudiant Master
+                  </option>
+                  <option value={MemberPosition.ENGINEER}>
+                    Ingénieur de recherche
+                  </option>
+                </select>
+              </div>
+
+              <div>
+                <label className="mb-1 block text-sm font-medium text-darkgrayTxt">
+                  Rôle
+                </label>
+                <select
+                  value={newUserRole}
+                  onChange={(e) => setNewUserRole(e.target.value as UserRole)}
+                  className="w-full rounded-lg border border-grayBorder px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value={UserRole.MEMBER}>Member</option>
+                  <option value={UserRole.ADMIN}>Admin</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="mb-1 block text-sm font-medium text-darkgrayTxt">
+                  Genre
+                </label>
+                <select
+                  value={newUserGender}
+                  onChange={(e) => setNewUserGender(e.target.value as Gender)}
+                  className="w-full rounded-lg border border-grayBorder px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value={Gender.MALE}>Homme</option>
+                  <option value={Gender.FEMALE}>Femme</option>
+                </select>
               </div>
 
               <div>

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { hashPassword, validateEsiEmail } from "@/lib/auth";
 import { getSession } from "@/lib/session";
-import { Gender, MemberPosition } from "@/generated/prisma";
+import { Gender, MemberPosition, UserRole } from "@/generated/prisma";
 
 export async function POST(request: NextRequest) {
   try {
@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { email, password, name } = body;
+    const { email, password, name, role, gender, position } = body;
 
     // Validate input
     if (!email || !password) {
@@ -49,6 +49,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const selectedRole =
+      role === UserRole.ADMIN ? UserRole.ADMIN : UserRole.MEMBER;
+    const selectedGender =
+      gender === Gender.FEMALE ? Gender.FEMALE : Gender.MALE;
+    const selectedPosition = Object.values(MemberPosition).includes(position)
+      ? (position as MemberPosition)
+      : MemberPosition.ASSOCIATE_PROFESSOR;
+
     // Hash password
     const hashedPassword = await hashPassword(password);
 
@@ -64,7 +72,7 @@ export async function POST(request: NextRequest) {
           email: email.toLowerCase(),
           password: hashedPassword,
           name: normalizedName || null,
-          role: "MEMBER",
+          role: selectedRole,
         },
         select: {
           id: true,
@@ -79,8 +87,8 @@ export async function POST(request: NextRequest) {
           email: createdUser.email,
           firstname,
           lastname,
-          gender: Gender.MALE,
-          position: MemberPosition.ASSOCIATE_PROFESSOR,
+          gender: selectedGender,
+          position: selectedPosition,
           userId: createdUser.id,
         },
       });
