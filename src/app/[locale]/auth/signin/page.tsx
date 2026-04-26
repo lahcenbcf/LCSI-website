@@ -11,7 +11,7 @@ export default function SignInPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const error = searchParams.get("error");
-  
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -91,8 +91,11 @@ export default function SignInPage() {
         {(error || formError) && (
           <div className="bg-red-50 border border-red-200 rounded-md p-4">
             <div className="text-sm text-red-600">
-              {formError || (error === "AccessDenied" && "Seuls les emails @esi.dz sont autorisés.") ||
-                (error === "Credentials" && "Email ou mot de passe incorrect.") ||
+              {formError ||
+                (error === "AccessDenied" &&
+                  "Seuls les emails @esi.dz sont autorisés.") ||
+                (error === "Credentials" &&
+                  "Email ou mot de passe incorrect.") ||
                 "Une erreur s'est produite."}
             </div>
           </div>
@@ -100,7 +103,10 @@ export default function SignInPage() {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700"
+            >
               Email
             </label>
             <div className="mt-1 relative">
@@ -122,7 +128,10 @@ export default function SignInPage() {
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700"
+            >
               Mot de passe
             </label>
             <div className="mt-1 relative">
@@ -173,12 +182,12 @@ export default function SignInPage() {
 
           <div className="text-center space-y-2">
             <p className="text-xs text-gray-500">
-              Seuls les emails <span className="font-medium text-blue-600">@esi.dz</span> sont autorisés.
+              Seuls les emails{" "}
+              <span className="font-medium text-blue-600">@esi.dz</span> sont
+              autorisés.
             </p>
-            <p className="text-sm">
-              <Link href="/auth/register" className="font-medium text-blue-600 hover:text-blue-500">
-                Pas encore de compte ? Inscrivez-vous
-              </Link>
+            <p className="text-sm text-gray-500">
+              La création de compte est gérée par un administrateur.
             </p>
           </div>
         </form>

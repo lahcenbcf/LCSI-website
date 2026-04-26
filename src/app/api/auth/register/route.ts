@@ -1,13 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import {
-  hashPassword,
-  validateEsiEmail
-} from "@/lib/auth";
-import { createSession } from "@/lib/session";
+import { hashPassword, validateEsiEmail } from "@/lib/auth";
+import { getSession } from "@/lib/session";
 
 export async function POST(request: NextRequest) {
   try {
+    const session = await getSession();
+
+    if (!session) {
+      return NextResponse.json(
+        {
+          error:
+            "Inscription publique désactivée. Seuls les administrateurs peuvent créer des comptes.",
+        },
+        { status: 403 },
+      );
+    }
+
     const body = await request.json();
     const { email, password, name } = body;
 
@@ -15,7 +24,7 @@ export async function POST(request: NextRequest) {
     if (!email || !password) {
       return NextResponse.json(
         { error: "Email et mot de passe requis" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -23,7 +32,7 @@ export async function POST(request: NextRequest) {
     if (!validateEsiEmail(email)) {
       return NextResponse.json(
         { error: "Seuls les emails @esi.dz sont autorisés" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -35,7 +44,7 @@ export async function POST(request: NextRequest) {
     if (existingUser) {
       return NextResponse.json(
         { error: "Un compte existe déjà avec cet email" },
-        { status: 409 }
+        { status: 409 },
       );
     }
 
@@ -57,9 +66,6 @@ export async function POST(request: NextRequest) {
         role: true,
       },
     });
-
-    // Create session
-    await createSession(user.id);
 
     return NextResponse.json({
       user: {

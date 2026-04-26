@@ -21,7 +21,7 @@ const PermissionsContext = createContext<PermissionsContextType>({
   canEdit: false,
   canDelete: false,
   canCreate: false,
-  canCreateMembers: false,
+  canCreateMembers: true,
   canCreatePublications: false,
   canCreateTeams: false,
   canEditMembers: false,
@@ -67,7 +67,7 @@ export function PermissionsProvider({
   const canCreate = userRole === "ADMIN";
 
   // Permissions spécifiques selon les nouvelles règles
-  const canCreateMembers = false; // Plus personne ne peut créer des membres (auto-création OAuth)
+  const canCreateMembers = true;
   const canCreatePublications = userRole === "ADMIN" || userRole === "MEMBER"; // Admin ET membres peuvent créer
   const canCreateTeams = userRole === "ADMIN";
   const canEditMembers = false; // Plus personne ne peut modifier les autres membres
@@ -97,6 +97,7 @@ export function PermissionsProvider({
 
 export const usePermissions = () => {
   const context = useContext(PermissionsContext);
+  console.log("PermissionsContext:", context); // Debug: Affiche le contexte dans la console
   if (!context) {
     throw new Error("usePermissions must be used within a PermissionsProvider");
   }

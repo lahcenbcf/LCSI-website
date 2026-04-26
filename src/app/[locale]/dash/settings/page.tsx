@@ -315,8 +315,7 @@ export default function SettingsPage() {
           }
         : {
             firstname:
-              (user.name || "").trim().split(" ").slice(1).join(" ") ||
-              "",
+              (user.name || "").trim().split(" ").slice(1).join(" ") || "",
             lastname: (user.name || "").trim().split(" ")[0] || "",
             email: user.email,
             position: "",
@@ -414,7 +413,7 @@ export default function SettingsPage() {
 
   const handleInputChange = (
     field: keyof ProfileData,
-    value: string | boolean
+    value: string | boolean,
   ) => {
     setProfile((prev) => ({ ...prev, [field]: value }));
   };

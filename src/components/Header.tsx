@@ -6,7 +6,7 @@ import { logo } from "@/assets";
 import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 import LanguageSwitcher from "./LanguageSwitcher";
-import { Menu, User, LogIn, LayoutDashboard } from "lucide-react";
+import { Menu, LogIn, LayoutDashboard } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -65,7 +65,7 @@ export default function Header() {
               </nav>
               {/* lang switcher */}
               <LanguageSwitcher />
-              
+
               {/* Auth Buttons */}
               <div className="flex items-center gap-2 ml-4">
                 {isLoading ? (
@@ -87,22 +87,13 @@ export default function Header() {
                     <span className="font-medium text-sm">Dashboard</span>
                   </Link>
                 ) : (
-                  <>
-                    <Link
-                      href="/auth/signin"
-                      className="flex items-center gap-2 px-4 py-2 text-mainBlue border border-mainBlue rounded-lg hover:bg-mainBlue/5 transition-all duration-200"
-                    >
-                      <LogIn size={18} />
-                      <span className="font-medium text-sm">Connexion</span>
-                    </Link>
-                    <Link
-                      href="/auth/register"
-                      className="flex items-center gap-2 px-4 py-2 bg-mainBlue text-white rounded-lg hover:bg-mainBlue/90 transition-all duration-200 shadow-md hover:shadow-lg"
-                    >
-                      <User size={18} />
-                      <span className="font-medium text-sm">S'inscrire</span>
-                    </Link>
-                  </>
+                  <Link
+                    href="/auth/signin"
+                    className="flex items-center gap-2 px-4 py-2 text-mainBlue border border-mainBlue rounded-lg hover:bg-mainBlue/5 transition-all duration-200"
+                  >
+                    <LogIn size={18} />
+                    <span className="font-medium text-sm">Connexion</span>
+                  </Link>
                 )}
               </div>
             </div>
@@ -139,29 +130,22 @@ export default function Header() {
                     )}
                     <div className="flex flex-col">
                       <span className="font-medium text-sm">Dashboard</span>
-                      <span className="text-xs text-white/70">{user.email}</span>
+                      <span className="text-xs text-white/70">
+                        {user.email}
+                      </span>
                     </div>
                   </Link>
                 ) : (
-                  <>
-                    <Link
-                      href="/auth/signin"
-                      className="flex items-center justify-center gap-2 px-4 py-3 text-mainBlue border border-mainBlue rounded-lg hover:bg-mainBlue/5 transition-all duration-200"
-                    >
-                      <LogIn size={18} />
-                      <span className="font-medium">Connexion</span>
-                    </Link>
-                    <Link
-                      href="/auth/register"
-                      className="flex items-center justify-center gap-2 px-4 py-3 bg-mainBlue text-white rounded-lg hover:bg-mainBlue/90 transition-all duration-200"
-                    >
-                      <User size={18} />
-                      <span className="font-medium">S'inscrire</span>
-                    </Link>
-                  </>
+                  <Link
+                    href="/auth/signin"
+                    className="flex items-center justify-center gap-2 px-4 py-3 text-mainBlue border border-mainBlue rounded-lg hover:bg-mainBlue/5 transition-all duration-200"
+                  >
+                    <LogIn size={18} />
+                    <span className="font-medium">Connexion</span>
+                  </Link>
                 )}
               </div>
-              
+
               {/* Navigation items */}
               <nav className="flex flex-col gap-4">
                 {navItems.map((item) => (

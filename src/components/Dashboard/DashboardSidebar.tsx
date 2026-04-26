@@ -13,6 +13,7 @@ import {
   BookOpen,
   Calendar,
   BarChart3,
+  Lock,
 } from "lucide-react";
 import { useAuth } from "@/components/AuthProvider";
 import {
@@ -55,6 +56,11 @@ const sidebarItems = [
     name: "Paramètres",
     href: "/dash/settings",
     icon: Settings,
+  },
+  {
+    name: "Sécurité",
+    href: "/dash/security",
+    icon: Lock,
   },
 ];
 

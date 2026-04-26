@@ -14,11 +14,8 @@ export default function HeroSection() {
 
   return (
     <div className="relative overflow-hidden">
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 via-white to-white -z-10" />
-      
-      <div className="md:flex lg:mt-8 2xl:container mx-auto">
-        <div className="px-4 py-8 lg:pl-32 bg-transparent lg:z-20 lg:mt-14">
+      <div className="md:flex lg:mt-8 2xl:container mx-auto gap-10 items-center">
+        <div className="px-4 py-8 bg-transparent lg:z-20 lg:mt-14 w-3/5">
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-mainBlue/10 rounded-full mb-6">
             <span className="w-2 h-2 bg-mainBlue rounded-full animate-pulse" />
@@ -27,7 +24,7 @@ export default function HeroSection() {
             </span>
           </div>
           
-          <h1 className="font-integralCF font-bold text-2xl w-[350px] lg:text-[43px] lg:w-auto lg:leading-tight">
+          <h1 className="font-integralCF font-bold text-2xl lg:text-[43px] lg:w-fit lg:leading-tight">
             {t("heroSection.lab_name")}
           </h1>
           
@@ -72,12 +69,12 @@ export default function HeroSection() {
           </div>
         </div>
         
-        <div className="flex justify-end relative md:w-full">
+        <div className="flex justify-end relative w-2/5">
           <div className="w-1/2 h-[350px] bg-gradient-to-br from-grayRectangle to-grayRectangle/70 lg:min-w-[370px] lg:h-[500px] rounded-bl-[60px]"></div>
           <Image
             src={computerman}
             alt="Computerman"
-            className="absolute right-0 top-[25px] w-full sm:max-w-[400px] h-[250px] object-cover lg:max-w-none lg:w-[800px] lg:h-[400px] drop-shadow-2xl"
+            className="w-full sm:max-w-[400px] h-[250px] object-cover lg:max-w-none lg:w-[800px] lg:h-[400px] drop-shadow-2xl"
             priority
           />
           <Image

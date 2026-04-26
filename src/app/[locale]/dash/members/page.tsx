@@ -26,6 +26,14 @@ export default function MembersPage() {
   const [selectedTeams, setSelectedTeams] = useState<string[]>([]);
   const [showFilters, setShowFilters] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [newUserName, setNewUserName] = useState("");
+  const [newUserEmail, setNewUserEmail] = useState("");
+  const [newUserPassword, setNewUserPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [createError, setCreateError] = useState<string | null>(null);
+  const [isCreating, setIsCreating] = useState(false);
+  const [createSuccess, setCreateSuccess] = useState<string | null>(null);
 
   const {
     data: membersData,
@@ -48,8 +56,59 @@ export default function MembersPage() {
   const members = membersData?.members || [];
   const teams = teamsData?.teams || [];
 
-  const handleMemberCreated = () => {
-    refetchMembers();
+  const resetCreateForm = () => {
+    setNewUserName("");
+    setNewUserEmail("");
+    setNewUserPassword("");
+    setConfirmPassword("");
+    setCreateError(null);
+  };
+
+  const handleCreateUser = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setCreateError(null);
+    setCreateSuccess(null);
+
+    if (!newUserEmail.toLowerCase().endsWith("@esi.dz")) {
+      setCreateError("Seuls les emails @esi.dz sont autorisés");
+      return;
+    }
+
+    if (newUserPassword !== confirmPassword) {
+      setCreateError("Les mots de passe ne correspondent pas");
+      return;
+    }
+
+    try {
+      setIsCreating(true);
+
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: newUserName,
+          email: newUserEmail,
+          password: newUserPassword,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setCreateError(data.error || "Erreur lors de la création du compte");
+        return;
+      }
+
+      setCreateSuccess("Compte créé avec succès.");
+      setShowCreateModal(false);
+      resetCreateForm();
+      await refetchMembers();
+    } catch (error) {
+      console.error("Erreur lors de la création du compte:", error);
+      setCreateError("Erreur serveur lors de la création du compte");
+    } finally {
+      setIsCreating(false);
+    }
   };
 
   const handleDeleteMember = async (memberId: string) => {
@@ -72,7 +131,7 @@ export default function MembersPage() {
     setSelectedTeams((prev) =>
       prev.includes(teamSlug)
         ? prev.filter((t) => t !== teamSlug)
-        : [...prev, teamSlug]
+        : [...prev, teamSlug],
     );
   };
 
@@ -121,14 +180,141 @@ export default function MembersPage() {
           )}
         </div>
         <div className="flex flex-col sm:flex-row gap-3">
-          <div className="bg-blue-50 border border-blue-200 rounded-lg px-4 py-3">
-            <p className="text-blue-800 text-sm">
-              <strong>Info :</strong> Les membres se créent automatiquement lors
-              de leur première connexion avec un email @esi.dz
-            </p>
-          </div>
+          <ProtectedAction action="createMembers">
+            <button
+              onClick={() => {
+                setCreateError(null);
+                setCreateSuccess(null);
+                setShowCreateModal(true);
+              }}
+              className="inline-flex items-center justify-center gap-2 rounded-lg bg-mainBlue px-4 py-3 text-white hover:bg-mainBlue/90 transition-colors"
+            >
+              <Plus size={18} />
+              <span>Ajouter un membre</span>
+            </button>
+          </ProtectedAction>
         </div>
       </div>
+
+      {createSuccess && (
+        <div className="rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800">
+          {createSuccess}
+        </div>
+      )}
+
+      {/* Create Member Account Modal */}
+      {showCreateModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="w-full max-w-lg rounded-xl bg-white p-6 shadow-xl">
+            <div className="mb-4 flex items-start justify-between">
+              <div>
+                <h2 className="text-xl font-semibold text-darkgrayTxt">
+                  Ajouter un membre
+                </h2>
+                <p className="text-sm text-lightgrayTxt">
+                  Création d'un compte utilisateur (profil membre à compléter
+                  ensuite).
+                </p>
+              </div>
+              <button
+                onClick={() => {
+                  setShowCreateModal(false);
+                  resetCreateForm();
+                }}
+                className="rounded p-1 text-lightgrayTxt hover:bg-gray-100"
+                aria-label="Fermer"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            {createError && (
+              <div className="mb-4 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+                {createError}
+              </div>
+            )}
+
+            <form onSubmit={handleCreateUser} className="space-y-4">
+              <div>
+                <label className="mb-1 block text-sm font-medium text-darkgrayTxt">
+                  Nom complet
+                </label>
+                <input
+                  type="text"
+                  value={newUserName}
+                  onChange={(e) => setNewUserName(e.target.value)}
+                  placeholder="Nom et prénom"
+                  className="w-full rounded-lg border border-grayBorder px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              <div>
+                <label className="mb-1 block text-sm font-medium text-darkgrayTxt">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  required
+                  value={newUserEmail}
+                  onChange={(e) => setNewUserEmail(e.target.value)}
+                  placeholder="etudiant@esi.dz"
+                  className="w-full rounded-lg border border-grayBorder px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              <div>
+                <label className="mb-1 block text-sm font-medium text-darkgrayTxt">
+                  Mot de passe
+                </label>
+                <input
+                  type="password"
+                  required
+                  value={newUserPassword}
+                  onChange={(e) => setNewUserPassword(e.target.value)}
+                  placeholder="Mot de passe"
+                  className="w-full rounded-lg border border-grayBorder px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              <div>
+                <label className="mb-1 block text-sm font-medium text-darkgrayTxt">
+                  Confirmer le mot de passe
+                </label>
+                <input
+                  type="password"
+                  required
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className="w-full rounded-lg border border-grayBorder px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              <div className="flex justify-end gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowCreateModal(false);
+                    resetCreateForm();
+                  }}
+                  className="rounded-lg border border-grayBorder px-4 py-2 text-darkgrayTxt hover:bg-gray-50"
+                >
+                  Annuler
+                </button>
+                <button
+                  type="submit"
+                  disabled={isCreating}
+                  className="inline-flex items-center gap-2 rounded-lg bg-mainBlue px-4 py-2 text-white hover:bg-mainBlue/90 disabled:opacity-60"
+                >
+                  {isCreating ? (
+                    <Loader2 size={16} className="animate-spin" />
+                  ) : null}
+                  Créer le compte
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* Filtres et recherche */}
       <div className="bg-white rounded-lg p-6 border border-grayBorder">
