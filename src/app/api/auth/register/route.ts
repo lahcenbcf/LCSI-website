@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { hashPassword, validateEsiEmail } from "@/lib/auth";
 import { getSession } from "@/lib/session";
+import { Gender, MemberPosition } from "@/generated/prisma";
 
 export async function POST(request: NextRequest) {
   try {
@@ -51,20 +52,40 @@ export async function POST(request: NextRequest) {
     // Hash password
     const hashedPassword = await hashPassword(password);
 
-    // Create user
-    const user = await prisma.user.create({
-      data: {
-        email: email.toLowerCase(),
-        password: hashedPassword,
-        name: name || null,
-        role: "MEMBER",
-      },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        role: true,
-      },
+    const normalizedName = (name || "").trim();
+    const nameParts = normalizedName.split(/\s+/).filter(Boolean);
+    const firstname = nameParts[0] || normalizedName || "Nouveau";
+    const lastname = nameParts.slice(1).join(" ") || "Membre";
+
+    // Create user and matching member profile in one transaction
+    const user = await prisma.$transaction(async (tx) => {
+      const createdUser = await tx.user.create({
+        data: {
+          email: email.toLowerCase(),
+          password: hashedPassword,
+          name: normalizedName || null,
+          role: "MEMBER",
+        },
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          role: true,
+        },
+      });
+
+      await tx.member.create({
+        data: {
+          email: createdUser.email,
+          firstname,
+          lastname,
+          gender: Gender.MALE,
+          position: MemberPosition.ASSOCIATE_PROFESSOR,
+          userId: createdUser.id,
+        },
+      });
+
+      return createdUser;
     });
 
     return NextResponse.json({
